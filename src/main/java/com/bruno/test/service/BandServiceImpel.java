@@ -1,8 +1,10 @@
 package com.bruno.test.service;
 
+import com.bruno.test.adapter.dto.BandaDTO;
 import com.bruno.test.data.Banda;
 import com.bruno.test.exceptions.ObjectNotFoundException;
 import com.bruno.test.repository.BandRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,8 @@ public class BandServiceImpel implements BandService {
 
     @Autowired
     private BandRepository repository;
+    @Autowired
+    private ModelMapper mapper;
 
     @Override
     public Banda findById(Integer id) {
@@ -24,5 +28,10 @@ public class BandServiceImpel implements BandService {
     @Override
     public List<Banda> findAll() {
         return repository.findAll();
+    }
+
+    @Override
+    public Banda save(BandaDTO obj) {
+        return repository.save(mapper.map(obj, Banda.class));
     }
 }
