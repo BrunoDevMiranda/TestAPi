@@ -19,5 +19,6 @@ public class Banda {
     private Integer id;
     private String name;
     private String genero;
+    private String email;
 
 }

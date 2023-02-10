@@ -16,4 +16,5 @@ public class BandaDTO {
     private Integer id;
     private String name;
     private String genero;
+    private String email;
 }
