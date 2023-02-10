@@ -2,6 +2,7 @@ package com.bruno.test.service;
 
 import com.bruno.test.adapter.dto.BandaDTO;
 import com.bruno.test.data.Banda;
+import com.bruno.test.exceptions.DataIntegratyViolationException;
 import com.bruno.test.exceptions.ObjectNotFoundException;
 import com.bruno.test.repository.BandRepository;
 import org.modelmapper.ModelMapper;
@@ -32,6 +33,15 @@ public class BandServiceImpel implements BandService {
 
     @Override
     public Banda save(BandaDTO obj) {
+        findByEmail(obj);
         return repository.save(mapper.map(obj, Banda.class));
+    }
+
+    private void findByEmail(BandaDTO obj){
+        Optional<Banda> banda = repository.findByEmail(obj.getEmail());
+        if (banda.isPresent()){
+            throw new DataIntegratyViolationException("E-mail já cadastrado no sistema");
+
+        }
     }
 }
