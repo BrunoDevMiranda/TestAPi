@@ -15,6 +15,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,6 +27,7 @@ class BandaControllerTest {
     public static final String NAME = METALLICA;
     public static final String GENERO = "Trash Metal";
     public static final String EMAIL = "metallica@gmail.com";
+    public static final int INDEX = 0;
     @InjectMocks
     private BandServiceImpel service;
     @Mock
@@ -45,7 +47,7 @@ class BandaControllerTest {
     }
 
     @Test
-    void findByIdThenReturnAnUserInstace() {
+    void findByIdThenReturnAnBandInstace() {
         when(repository.findById(anyInt())).thenReturn(optionalBanda);
         Banda response = service.findById(ID);
 
@@ -68,9 +70,19 @@ class BandaControllerTest {
         }
 
     }
-
     @Test
-    void findAll() {
+    void whenFindAllThenReturnAnListOfBand() {
+        when(repository.findAll()).thenReturn(List.of(banda));
+        List<Banda> response = service.findAll();
+        assertNotNull(response);
+        assertEquals(1, response.size());
+        assertEquals(Banda.class, response.get(INDEX).getClass());
+
+        assertEquals(ID, response.get(INDEX).getId());
+        assertEquals(NAME, response.get(INDEX).getId());
+        assertEquals(GENERO, response.get(INDEX).getId());
+        assertEquals(EMAIL, response.get(INDEX).getId());
+
     }
 
     @Test
