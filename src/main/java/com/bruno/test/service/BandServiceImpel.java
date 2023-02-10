@@ -42,6 +42,11 @@ public class BandServiceImpel implements BandService {
         return repository.save(mapper.map(obj, Banda.class));
     }
 
+    @Override
+    public void delete(Integer id) {
+        repository.deleteById(id);
+    }
+
     private void findByEmail(BandaDTO obj){
         Optional<Banda> banda = repository.findByEmail(obj.getEmail());
         if (banda.isPresent() && !banda.get().equals(obj.getId())){

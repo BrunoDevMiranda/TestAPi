@@ -10,4 +10,5 @@ public interface BandService {
     List<Banda> findAll();
     Banda save(BandaDTO obj);
     Banda update(BandaDTO obj);
+    void delete(Integer id);
 }
