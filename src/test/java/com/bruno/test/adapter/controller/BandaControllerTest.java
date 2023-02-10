@@ -5,6 +5,7 @@ import com.bruno.test.data.Banda;
 import com.bruno.test.exceptions.ObjectNotFoundException;
 import com.bruno.test.repository.BandRepository;
 import com.bruno.test.service.BandServiceImpel;
+import org.h2.command.dml.MergeUsing;
 import org.hibernate.event.spi.PreInsertEvent;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -82,11 +83,32 @@ class BandaControllerTest {
         assertEquals(NAME, response.get(INDEX).getId());
         assertEquals(GENERO, response.get(INDEX).getId());
         assertEquals(EMAIL, response.get(INDEX).getId());
+    }
 
+
+
+    @Test
+    void whenSaveThenReturnSuccess() {
+        when(repository.save(any())).thenReturn(banda);
+
+        Banda response = service.save(bandaDTO);
+
+        assertNotNull(response);
+        assertEquals(Banda.class, response.getClass());
+        assertEquals(ID,response.getId());
+        assertEquals(NAME,response.getName());
+        assertEquals(EMAIL,response.getEmail());
+        assertEquals(GENERO,response.getGenero());
     }
 
     @Test
-    void save() {
+    void whenSaveThenReturnAnDataIntergrityViolationException(){
+//        when(repository.findByEmail(anyString())).thenReturn(optionalBanda);
+//        try{
+//            optionalBanda.get().setId(2);
+//            service.save(bandaDTO);
+//
+//        }
     }
 
     @Test
