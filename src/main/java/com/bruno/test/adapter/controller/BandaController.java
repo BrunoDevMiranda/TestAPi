@@ -43,5 +43,14 @@ public class BandaController {
         return ResponseEntity.created(uri).build();
    }
 
+   @PutMapping(value = "/{id}")
+    public ResponseEntity<BandaDTO> update(@PathVariable Integer id, @RequestBody BandaDTO obj){
+        obj.setId(id);
+
+        return ResponseEntity.ok().body(mapper.map( service.update(obj), BandaDTO.class));
+   }
+
+
+
 
 }

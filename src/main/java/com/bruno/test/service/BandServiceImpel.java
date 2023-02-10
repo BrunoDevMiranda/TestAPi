@@ -37,11 +37,17 @@ public class BandServiceImpel implements BandService {
         return repository.save(mapper.map(obj, Banda.class));
     }
 
+    @Override
+    public Banda update(BandaDTO obj) {
+        return repository.save(mapper.map(obj, Banda.class));
+    }
+
     private void findByEmail(BandaDTO obj){
         Optional<Banda> banda = repository.findByEmail(obj.getEmail());
-        if (banda.isPresent()){
+        if (banda.isPresent() && !banda.get().equals(obj.getId())){
             throw new DataIntegratyViolationException("E-mail já cadastrado no sistema");
-
         }
     }
+
+
 }

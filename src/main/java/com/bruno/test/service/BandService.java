@@ -9,4 +9,5 @@ public interface BandService {
     Banda findById(Integer id);
     List<Banda> findAll();
     Banda save(BandaDTO obj);
+    Banda update(BandaDTO obj);
 }
