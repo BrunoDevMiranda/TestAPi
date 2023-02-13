@@ -2,6 +2,7 @@ package com.bruno.test.adapter.controller;
 
 import com.bruno.test.adapter.dto.BandaDTO;
 import com.bruno.test.data.Banda;
+import com.bruno.test.exceptions.DataIntegratyViolationException;
 import com.bruno.test.exceptions.ObjectNotFoundException;
 import com.bruno.test.repository.BandRepository;
 import com.bruno.test.service.BandServiceImpel;
@@ -80,9 +81,9 @@ class BandaControllerTest {
         assertEquals(Banda.class, response.get(INDEX).getClass());
 
         assertEquals(ID, response.get(INDEX).getId());
-        assertEquals(NAME, response.get(INDEX).getId());
-        assertEquals(GENERO, response.get(INDEX).getId());
-        assertEquals(EMAIL, response.get(INDEX).getId());
+        assertEquals(NAME, response.get(INDEX).getName());
+        assertEquals(GENERO, response.get(INDEX).getGenero());
+        assertEquals(EMAIL, response.get(INDEX).getEmail());
     }
 
 
@@ -103,20 +104,64 @@ class BandaControllerTest {
 
     @Test
     void whenSaveThenReturnAnDataIntergrityViolationException(){
-//        when(repository.findByEmail(anyString())).thenReturn(optionalBanda);
-//        try{
-//            optionalBanda.get().setId(2);
-//            service.save(bandaDTO);
-//
-//        }
+        when(repository.findByEmail(anyString())).thenReturn(optionalBanda);
+        try{
+            optionalBanda.get().setId(2);
+            service.save(bandaDTO);
+        } catch (Exception ex) {
+            assertEquals(DataIntegratyViolationException.class, ex.getClass());
+            assertEquals("E-mail já cadastrado no sistema", ex.getMessage());
+        }
     }
 
     @Test
     void update() {
+
+        when(repository.save(any())).thenReturn(banda);
+
+        Banda response = service.update(bandaDTO);
+
+        assertNotNull(response);
+        assertEquals(Banda.class, response.getClass());
+        assertEquals(ID,response.getId());
+        assertEquals(NAME,response.getName());
+        assertEquals(EMAIL,response.getEmail());
+        assertEquals(GENERO,response.getGenero());
+
     }
 
     @Test
-    void delete() {
+    void whenUpdateThenReturnAnDataIntergrityViolationException(){
+        when(repository.findByEmail(anyString())).thenReturn(optionalBanda);
+        try{
+            optionalBanda.get().setId(2);
+            service.update(bandaDTO);
+        } catch (Exception ex) {
+            assertEquals(DataIntegratyViolationException.class, ex.getClass());
+            assertEquals("E-mail já cadastrado no sistema", ex.getMessage());
+        }
+    }
+
+    @Test
+    void deleteWithSucess() {
+        when(repository.findById(anyInt())).thenReturn(optionalBanda);
+        doNothing().when(repository).deleteById(anyInt());
+        service.delete(ID);
+        verify(repository, times(1)).deleteById(anyInt());
+
+    }
+
+    @Test
+    void deleteWithObjectNotFoundException() {
+        when(repository.findById(anyInt()))
+                .thenThrow(new ObjectNotFoundException("Objeto não encontrado"));
+
+        try {
+            service.delete(ID);
+        } catch (Exception ex){
+            assertEquals(ObjectNotFoundException.class, ex.getClass());
+        }
+
     }
 
     public void start() {
