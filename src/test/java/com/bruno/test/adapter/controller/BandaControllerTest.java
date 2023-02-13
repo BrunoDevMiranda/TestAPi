@@ -17,6 +17,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,9 +40,10 @@ class BandaControllerTest {
     @InjectMocks
     private BandaController controller;
     @Mock
-    private BandServiceImpel serviceImpel;
+    private BandServiceImpel service;
     @Mock
     private ModelMapper mapper;
+    public static final int INDEX = 0;
     @BeforeEach
     void setUp(){
         MockitoAnnotations.openMocks(this);
@@ -48,13 +51,42 @@ class BandaControllerTest {
     }
 
     @Test
-    void findById(){
+    void whenFindById(){
+        when(service.findById(anyInt())).thenReturn(banda);
+        when(mapper.map(any(), any())).thenReturn(bandaDTO);
 
+        ResponseEntity<BandaDTO> response = controller.findById(ID);
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(BandaDTO.class, response.getBody().getClass());
+
+        assertEquals(ID, response.getBody().getId());
+        assertEquals(NAME, response.getBody().getName());
+        assertEquals(GENERO, response.getBody().getGenero());
+        assertEquals(EMAIL, response.getBody().getEmail());
     }
-
     @Test
     void findall(){
+        when(service.findAll()).thenReturn(List.of(banda));
+        when(mapper.map(any(), any())).thenReturn(bandaDTO);
+
+        ResponseEntity<List<BandaDTO>> response = controller.findAll();
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(BandaDTO.class, response.getBody().get(INDEX).getClass());
+
+        assertEquals(ID, response.getBody().get(INDEX).getId());
+        assertEquals(NAME, response.getBody().get(INDEX).getName());
+        assertEquals(GENERO, response.getBody().get(INDEX).getGenero());
+        assertEquals(EMAIL, response.getBody().get(INDEX).getEmail());
     }
+
+
 
 
     public void start() {
