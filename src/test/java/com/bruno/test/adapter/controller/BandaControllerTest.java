@@ -94,10 +94,27 @@ class BandaControllerTest {
 
         Banda response = controller.save(bandaDTO);
         assertEquals(Banda.class, response.getClass());
-
-
     }
 
+    @Test
+    void whenUpdateTheReturnUpdate(){
+        when(service.update(bandaDTO)).thenReturn(banda);
+        when(mapper.map(any(), any())).thenReturn(bandaDTO);
+
+        ResponseEntity<BandaDTO> response = controller.update(ID, bandaDTO);
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(BandaDTO.class, response.getBody().getClass());
+
+        assertEquals(ID, response.getBody().getId());
+        assertEquals(NAME, response.getBody().getName());
+        assertEquals(EMAIL, response.getBody().getEmail());
+        assertEquals(GENERO, response.getBody().getGenero());
+    }
 
 
 
