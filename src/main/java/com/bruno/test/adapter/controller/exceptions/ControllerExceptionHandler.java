@@ -22,7 +22,7 @@ public class ControllerExceptionHandler {
 
 
     @ExceptionHandler(DataIntegratyViolationException.class)
-    public ResponseEntity<StandError>dataIntegratyViolationException(DataIntegratyViolationException ex, HttpServletRequest request){
+    public ResponseEntity<StandError>dataIntegrityViolationException(DataIntegratyViolationException ex, HttpServletRequest request){
         StandError error = new StandError(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value()
                 ,ex.getMessage(), request.getRequestURI());
 
