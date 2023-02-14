@@ -2,16 +2,16 @@ package com.bruno.test.adapter.controller;
 
 import com.bruno.test.adapter.dto.BandaDTO;
 
+import com.bruno.test.data.Banda;
 import com.bruno.test.service.BandService;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,12 +35,9 @@ public class BandaController {
    }
 
    @PostMapping
-    public ResponseEntity<BandaDTO> save(@RequestBody BandaDTO obj){
-       URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path(ID)
-               .buildAndExpand(service.save(obj)
-                       .getId())
-               .toUri();
-        return ResponseEntity.created(uri).build();
+   @ResponseStatus(HttpStatus.CREATED)
+    public Banda save(@RequestBody BandaDTO obj){
+        return service.save(obj);
    }
 
    @PutMapping(value = ID)

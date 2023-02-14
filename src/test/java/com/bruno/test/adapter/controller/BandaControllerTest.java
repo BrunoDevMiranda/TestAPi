@@ -19,7 +19,9 @@ import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,7 +70,7 @@ class BandaControllerTest {
         assertEquals(EMAIL, response.getBody().getEmail());
     }
     @Test
-    void findall(){
+    void findallTheReturnaListOfBandaDTO(){
         when(service.findAll()).thenReturn(List.of(banda));
         when(mapper.map(any(), any())).thenReturn(bandaDTO);
 
@@ -84,6 +86,16 @@ class BandaControllerTest {
         assertEquals(NAME, response.getBody().get(INDEX).getName());
         assertEquals(GENERO, response.getBody().get(INDEX).getGenero());
         assertEquals(EMAIL, response.getBody().get(INDEX).getEmail());
+    }
+
+    @Test
+    void whenSaveTheReturnCreated(){
+        when(service.save(any())).thenReturn(banda);
+
+        Banda response = controller.save(bandaDTO);
+        assertEquals(Banda.class, response.getClass());
+
+
     }
 
 
