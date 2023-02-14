@@ -115,7 +115,18 @@ class BandaControllerTest {
         assertEquals(EMAIL, response.getBody().getEmail());
         assertEquals(GENERO, response.getBody().getGenero());
     }
+    @Test
+    void whenDeleteTheReturnSucess(){
+        doNothing().when(service).delete(anyInt());
 
+        ResponseEntity<BandaDTO> response = controller.delete(ID);
+         assertNotNull(response);
+         assertEquals(ResponseEntity.class, response.getClass());
+         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+         verify(service, times(1)).delete(anyInt());
+
+
+    }
 
 
     public void start() {
